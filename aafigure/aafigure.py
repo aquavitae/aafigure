@@ -13,8 +13,8 @@ This is open source software under the BSD license. See LICENSE.txt for more
 details.
 """
 import codecs
-from error import UnsupportedFormatError
-from shapes import *
+from .error import UnsupportedFormatError
+from .shapes import *
 from unicodedata import east_asian_width
 import sys
 
@@ -1001,9 +1001,9 @@ def render(input, output=None, options=None):
 
     close_output = False
     if output is None:
-        import StringIO
-        options['file_like'] = StringIO.StringIO()
-    elif isinstance(output, basestring):
+        import io
+        options['file_like'] = io.StringIO()
+    elif isinstance(output, str):
         options['file_like'] = file(output, 'wb')
         close_output = True
     else:
@@ -1013,18 +1013,18 @@ def render(input, output=None, options=None):
         # unsupported backends (this would happen when a library a backend
         # depends on is not installed)
         if options['format'].lower() == 'svg':
-            import svg
+            from . import svg
             visitor_class = svg.SVGOutputVisitor
         elif options['format'].lower() == 'pdf':
-            import pdf
+            from . import pdf
             visitor_class = pdf.PDFOutputVisitor
         elif options['format'].lower() == 'ascii':
-            import aa
+            from . import aa
             visitor_class = aa.AsciiOutputVisitor
         else:
             # for all other formats, it may be a bitmap type. let
             # PIL decide if it can write a file of that type.
-            import pil
+            from . import pil
             visitor_class = pil.PILOutputVisitor
         # now render and output the image
         visitor = process(input, visitor_class, options)
@@ -1215,8 +1215,8 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
     try:
         (visitor, output) = render(input, output, options_dict)
         output.close()
-    except UnsupportedFormatError, e:
-        print "ERROR: Can't output format '%s': %s" % (options.format, e)
+    except UnsupportedFormatError as e:
+        print("ERROR: Can't output format '%s': %s" % (options.format, e))
 
 
 # when module is run, run the command line tool

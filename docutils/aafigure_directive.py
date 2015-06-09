@@ -33,22 +33,22 @@ def AAFigureDirective(name, arguments, options, content, lineno,
     global aafigure_counter
 
     # ensure that options are present and initialized with defaults if not given
-    if not options.has_key('background'): options['background'] = '#ffffff'
-    if not options.has_key('foreground'): options['foreground'] = '#000000'
-    if not options.has_key('fill'): options['fill'] = options['foreground'] # fill = fore by default
-    if not options.has_key('scale'): options['scale'] = 1
-    if not options.has_key('line_width'): options['line_width'] = 2
-    if not options.has_key('format'): options['format'] = DEFAULT_FORMAT
-    if not options.has_key('aspect'): options['aspect'] = 1
-    if not options.has_key('proportional'): options['proportional'] = False
-    if not options.has_key('name'):
+    if 'background' not in options: options['background'] = '#ffffff'
+    if 'foreground' not in options: options['foreground'] = '#000000'
+    if 'fill' not in options: options['fill'] = options['foreground'] # fill = fore by default
+    if 'scale' not in options: options['scale'] = 1
+    if 'line_width' not in options: options['line_width'] = 2
+    if 'format' not in options: options['format'] = DEFAULT_FORMAT
+    if 'aspect' not in options: options['aspect'] = 1
+    if 'proportional' not in options: options['proportional'] = False
+    if 'name' not in options:
         options['name'] = 'aafigure-%i' % aafigure_counter
         aafigure_counter += 1
 
     output_name = options['name'] + '.' + options['format'].lower()
     try:
         (visitor, output) = aafigure.render(text, output_name, options)
-    except aafigure.UnsupportedFormatError, e:
+    except aafigure.UnsupportedFormatError as e:
         result = [state_machine.reporter.error(str(e),
             nodes.literal_block(block_text, block_text),
             line=lineno

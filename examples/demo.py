@@ -19,17 +19,17 @@ ascii_art = """\
 """
 
 # Show what we're parsing.
-print " input ".center(78, '=')
-print ascii_art
+print(" input ".center(78, '='))
+print(ascii_art)
 # Parse the image.
 aaimg = aafigure.AsciiArtImage(ascii_art)
 aaimg.recognize()
 
 # For fun, output the ASCII version in the console.
-print " output ".center(78, '=')
+print(" output ".center(78, '='))
 aav = aafigure.aa.AsciiOutputVisitor({'file_like':sys.stdout, 'scale':2})
 aav.visit_image(aaimg)
-print "="*78
+print("="*78)
 
 # Writing an SVG file would be possible in a similar way, but there is the much
 # easier render function for that.
@@ -43,8 +43,8 @@ visitor, output = aafigure.render(ascii_art, options={'format':'svg'})
 # object has to be passed in the options:
 # {'file_like' = open("somefile.svg", "wb")}
 import aafigure.svg
-import StringIO
-fl = StringIO.StringIO()
+import io
+fl = io.StringIO()
 visitor = aafigure.process(
     ascii_art,
     aafigure.svg.SVGOutputVisitor,
